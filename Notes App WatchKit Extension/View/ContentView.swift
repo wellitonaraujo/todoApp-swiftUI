@@ -14,6 +14,10 @@ struct ContentView: View {
     
     // MARK: - FUNCTION
     
+    func saveNotes() {
+        dump(notes)
+    }
+    
     
     // MARK: - BODY
     
@@ -25,12 +29,31 @@ struct ContentView: View {
                 
                 Button {
                     // ACTION
+                    guard text.isEmpty == false else { return }
+                    
+                    let note = Note(id: UUID(), text: text)
+                    
+                    notes.append(note)
+                    
+                    text = ""
+                    
+                    saveNotes() // sabe the note/s
+                    
                 } label: {
-                    Image(systemName: "plus")
+                    Image(systemName: "plus.circle")
+                        .font(.system(size: 42, weight: .semibold))
                 }
                 .fixedSize()
-                .buttonStyle(BorderedButtonStyle(tint: .accentColor))
+                .buttonStyle(PlainButtonStyle())
+                .foregroundColor(.accentColor)
+                
+                //.buttonStyle(BorderedButtonStyle(tint: .accentColor)) - funciona tbm drx :)
+                
             }// HSTACK
+            
+            Spacer()
+            
+            Text("\(notes.count)")
         } //: VSTACK
         .navigationTitle("Notes")
     }
