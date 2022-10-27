@@ -32,6 +32,13 @@ struct ContentView: View {
         }
     }
     
+    func deleteNotes(offsets: IndexSet) {
+        withAnimation {
+            notes.remove(atOffsets: offsets)
+            saveNotes()
+        }
+    }
+    
     func load() {
         DispatchQueue.main.async {
             do {
@@ -66,11 +73,11 @@ struct ContentView: View {
                     
                     text = ""
                     
-                    saveNotes() // sabe the note/s
+                    saveNotes() // sabe the notes
                     
                 } label: {
                     Image(systemName: "plus.circle")
-                        .font(.system(size: 42, weight: .semibold))
+                        .font(.system(size: 42, weight: .bold))
                 }
                 .fixedSize()
                 .buttonStyle(PlainButtonStyle())
@@ -92,7 +99,8 @@ struct ContentView: View {
                             .lineLimit(1)
                             .padding(.leading, 5)
                     } //: HSTACK
-                }
+                }// LOOP
+                .onDelete(perform: deleteNotes)
             } // LIST
         } //: VSTACK
         .navigationTitle("Notes")
