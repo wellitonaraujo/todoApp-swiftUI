@@ -54,9 +54,7 @@ struct ContentView: View {
         }
     }
     
-    
     // MARK: - BODY
-    
     
     var body: some View {
         VStack {
@@ -64,7 +62,6 @@ struct ContentView: View {
                 TextField("Add New Note", text: $text)
                 
                 Button {
-                    // ACTION
                     guard text.isEmpty == false else { return }
                     
                     let note = Note(id: UUID(), text: text)
@@ -73,7 +70,7 @@ struct ContentView: View {
                     
                     text = ""
                     
-                    saveNotes() // sabe the notes
+                    saveNotes()
                     
                 } label: {
                     Image(systemName: "plus.circle")
@@ -83,26 +80,35 @@ struct ContentView: View {
                 .buttonStyle(PlainButtonStyle())
                 .foregroundColor(.accentColor)
                 
-                //.buttonStyle(BorderedButtonStyle(tint: .accentColor)) - funciona tbm drx :)
-                
-            }// HSTACK
+            }
             
             Spacer()
             
-            List {
-                ForEach(0..<notes.count, id: \.self) { i in
-                    HStack {
-                        Capsule()
-                            .frame(width: 4)
-                            .foregroundColor(.accentColor)
-                        Text(notes[i].text)
-                            .lineLimit(1)
-                            .padding(.leading, 5)
-                    } //: HSTACK
-                }// LOOP
-                .onDelete(perform: deleteNotes)
-            } // LIST
-        } //: VSTACK
+            if notes.count >= 1 {
+                List {
+                    ForEach(0..<notes.count, id: \.self) { i in
+                        HStack {
+                            Capsule()
+                                .frame(width: 4)
+                                .foregroundColor(.accentColor)
+                            Text(notes[i].text)
+                                .lineLimit(1)
+                                .padding(.leading, 5)
+                        }
+                    }
+                    .onDelete(perform: deleteNotes)
+                }
+            } else {
+                Spacer()
+                Image(systemName: "note.text")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(.gray)
+                    .opacity(0.25)
+                    .padding(10)
+                Spacer()
+            }
+        }
         .navigationTitle("Notes")
         .onAppear(perform: {
             load()
